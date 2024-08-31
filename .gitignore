@@ -1,0 +1,62 @@
+# Відкриття у Visual Studio
+.vscode/
+.vs/
+*.csproj.user
+*.csproj.DotSettings
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Папки компіляції та вихідні файли
+bin/
+obj/
+out/
+
+# Пакетні менеджери
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Резервні копії
+*.bak
+*.log
+*.swp
+
+# Файли конфігурації
+appsettings.json
+appsettings.Development.json
+secrets.json
+
+# Автоматично згенеровані файли
+Generated/
+ServiceReferences/
+
+# Тести
+TestResults/
+*.TestResults/
+
+# Сертифікати, ключі, файли конфіденційності
+*.pfx
+*.key
+*.cer
+
+# Системні файли
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Інші тимчасові файли
+*.tmp
+*.temp
+*.log
+*.pid
+*.cache
+*.sqlite
+
+# Git файли
+*.orig
+
+.vs/
+/.idea
