@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AutoSql.Consts;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using AutoSql.Consts;
+using System;
 
 public static class SqlObjectTypeHelper
 {
@@ -27,7 +27,7 @@ public static class SqlObjectTypeHelper
         { SqlObjectTypes.ReplicationFilterProcedure, @"(?i)\bCREATE\s+REPLICATION\s+FILTER\s+PROCEDURE\b" },
         { SqlObjectTypes.Rule, @"(?i)\bCREATE\s+RULE\b" },
         { SqlObjectTypes.SequenceObject, @"(?i)\bCREATE\s+SEQUENCE\s+OBJECT\b" },
-        { SqlObjectTypes.ServiceQueue, @"(?i)\bCREATE\s+SERVICE\s+QUEUE\b" },
+        { SqlObjectTypes.ServiceQueue, @"(?i)\bCREATE\s+SпERVICE\s+QUEUE\b" },
         { SqlObjectTypes.SqlInlineTableValuedFunction, @"(?i)\bCREATE\s+SQL\s+INLINE\s+TABLE\s+VALUED\s+FUNCTION\b" },
         { SqlObjectTypes.SqlScalarFunction, @"(?i)\bCREATE\s+SQL\s+SCALAR\s+FUNCTION\b" },
         { SqlObjectTypes.SqlStoredProcedure, @"(?i)\bCREATE\s+SQL\s+STORED\s+PROCEDURE\b" },
@@ -36,9 +36,7 @@ public static class SqlObjectTypeHelper
         { SqlObjectTypes.Synonym, @"(?i)\bCREATE\s+SYNONYM\b" },
         { SqlObjectTypes.SystemTable, @"(?i)\bCREATE\s+SYSTEM\s+TABLE\b" },
         { SqlObjectTypes.TypeTable, @"(?i)\bCREATE\s+TYPE\s+TABLE\b" },
-        { SqlObjectTypes.UniqueConstraint, @"(?i)\bCREATE\s+UNIQUE\s+CONSTRAINT\b" },
-        { SqlObjectTypes.UserTable, @"(?i)\bCREATE\s+USER\s+TABLE\b" },
-        { SqlObjectTypes.View, @"(?i)\bCREATE\s+VIEW\b" }
+        { SqlObjectTypes.UniqueConstraint, @"(?i)\bCREATE\s+UNIQUE\s+CONSTRAINT\b" }
     };
 
     public static string GetSqlObjectType(string sqlContent)

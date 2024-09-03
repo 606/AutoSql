@@ -18,9 +18,9 @@ namespace AutoSql.Forms
             InitializeComponent();
             var exportFileHelper = new ExportFileHelper();
             var sqlBlockSplitter = new SqlBlockSplitter();
-            var procedureDetailsExtractor = new ProcedureDetailsExtractor();
-            var dbObjectExistenceValidator = new DBObjectExistenceValidator();
-            var sqlContentProcessor = new SqlContentProcessor(sqlBlockSplitter, procedureDetailsExtractor, dbObjectExistenceValidator);
+            var sqlContentExtractor = new SqlContentExtractor();
+            var dbObjectExistenceValidator = new SqlExistenceHelper();
+            var sqlContentProcessor = new SqlContentProcessor(sqlBlockSplitter, sqlContentExtractor, dbObjectExistenceValidator);
 
             _gitService = new GitService();
             _sqlScriptGenerationService = new SqlScriptGenerationService(_gitService, sqlContentProcessor, exportFileHelper);
@@ -47,6 +47,7 @@ namespace AutoSql.Forms
             {
                 _sqlScriptGenerationService.GenerateScript(repoPath, outputPath);
                 MessageBox.Show(AppMessages.SqlScriptGeneratedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Application.Exit();
             }
             catch (Exception ex)
             {

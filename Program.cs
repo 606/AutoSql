@@ -17,7 +17,7 @@ namespace AutoSql
             {
                 // CLI режим для post events
                 var gitService = new GitService();
-                var sqlContentProcessor = new SqlContentProcessor(new SqlBlockSplitter(), new ProcedureDetailsExtractor(), new DBObjectExistenceValidator());
+                var sqlContentProcessor = new SqlContentProcessor(new SqlBlockSplitter(), new SqlContentExtractor(), new SqlExistenceHelper());
                 var fileHelper = new ExportFileHelper();
                 var scriptGenerator = new SqlScriptGenerationService(gitService, sqlContentProcessor, fileHelper);
 

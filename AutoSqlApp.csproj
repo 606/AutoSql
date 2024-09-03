@@ -101,12 +101,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthorizationService.cs" />
     <Compile Include="Services\GitService.cs" />
-    <Compile Include="Services\ProcedureDetailsExtractor.cs" />
     <Compile Include="Services\SqlBlockSplitter.cs" />
+    <Compile Include="Services\SqlContentExtractor.cs" />
     <Compile Include="Services\SqlContentProcessor.cs" />
     <Compile Include="Services\SqlScriptGenerationService.cs" />
+    <Compile Include="Services\UserTableExtractor.cs" />
     <Compile Include="Validators\CommitValidator.cs" />
-    <Compile Include="Validators\DBObjectExistenceValidator.cs" />
+    <Compile Include="Helpers\SqlExistenceHelper.cs" />
     <Compile Include="Validators\RepositoryValidator.cs" />
     <Compile Include="Validators\SqlChangesValidator.cs" />
     <Compile Include="Services\ValidationService.cs" />
