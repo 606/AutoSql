@@ -1,5 +1,4 @@
 ﻿using AutoSql.Helpers;
-using System;
 using System.IO;
 using System.Text;
 
@@ -31,6 +30,9 @@ namespace AutoSql.Services
 
             using (StreamWriter streamWriter = new StreamWriter(scriptFilePath, false, Encoding.UTF8))
             {
+                string header = ExportFileHelper.GenerateFileHeader();
+                streamWriter.WriteLine(header);
+
                 foreach (var file in changedFiles)
                 {
                     _sqlContentProcessor.ProcessFile(file, repoPath, streamWriter);

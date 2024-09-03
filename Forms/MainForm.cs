@@ -1,75 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using AutoSql.Consts;
 using AutoSql.Helpers;
 using AutoSql.Services;
-using AutoSql.Validators;
 
 namespace AutoSql.Forms
 {
     public partial class MainForm : Form
     {
-        private readonly SqlScriptGenerationService _generator;
-        private readonly ValidationService _validationService;
         private readonly GitService _gitService;
+        private readonly SqlScriptGenerationService _sqlScriptGenerationService;
 
         public MainForm()
         {
             InitializeComponent();
+            var exportFileHelper = new ExportFileHelper();
             var sqlBlockSplitter = new SqlBlockSplitter();
             var procedureDetailsExtractor = new ProcedureDetailsExtractor();
             var dbObjectExistenceValidator = new DBObjectExistenceValidator();
-            _generator = new SqlScriptGenerationService(new GitService(), new SqlContentProcessor(sqlBlockSplitter, procedureDetailsExtractor, dbObjectExistenceValidator), new ExportFileHelper());
-            _validationService = new ValidationService();
+            var sqlContentProcessor = new SqlContentProcessor(sqlBlockSplitter, procedureDetailsExtractor, dbObjectExistenceValidator);
+
             _gitService = new GitService();
-
-            // Додаємо валідатори
-            _validationService.AddValidator(new RepositoryValidator(_gitService));
-            _validationService.AddValidator(new CommitValidator(_gitService));
-            _validationService.AddValidator(new SqlChangesValidator(_gitService));
+            _sqlScriptGenerationService = new SqlScriptGenerationService(_gitService, sqlContentProcessor, exportFileHelper);
         }
 
-        private void BtnGenerate_Click(object sender, EventArgs e)
+        private void btnGenerateScript_Click(object sender, EventArgs e)
         {
-            var repoPath = txtRepoPath.Text;
-            var outputPath = txtOutputPath.Text;
-            var commitHash = _gitService.GetCurrentCommit(repoPath); // Отримання поточного комміту
+            string repoPath = txtRepoPath.Text;
+            string outputPath = txtOutputPath.Text;
 
-            if (!Directory.Exists(outputPath))
+            if (string.IsNullOrWhiteSpace(repoPath) || string.IsNullOrWhiteSpace(outputPath))
             {
-                try
-                {
-                    Directory.CreateDirectory(outputPath);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to create output directory: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                MessageBox.Show(ErrorMessages.FillInAllFields, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-
-            if (_validationService.ValidateAll(commitHash, repoPath, out List<string> errorMessages))
+            if (!_gitService.IsGitRepository(repoPath))
             {
-                _generator.GenerateScript(repoPath, outputPath);
-                MessageHelper.ShowSuccess(AppMessages.SqlScriptGeneratedSuccess);
-                Application.Exit();
+                MessageBox.Show(ErrorMessages.InvalidFolderPath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
-            {
-                foreach (var message in errorMessages)
-                {
-                    MessageHelper.ShowError(message);
-                }
-            }
-        }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
+            try
+            {
+                _sqlScriptGenerationService.GenerateScript(repoPath, outputPath);
+                MessageBox.Show(AppMessages.SqlScriptGeneratedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(ErrorMessages.ErrorWritingToFile, ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void MainForm_Shown(object sender, EventArgs e)

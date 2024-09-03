@@ -5,12 +5,7 @@ namespace AutoSql.Services
 {
     public class AuthorizationService
     {
-        private readonly Dictionary<string, string> _appUsers;
-
-        public AuthorizationService()
-        {
-            _appUsers = UserCredentials.AppUsers; // Використовуємо дані з класу UserCredentials
-        }
+        private readonly Dictionary<string, string> _appUsers = UserCredentials.AppUsers;
 
         public bool Login(string username, string password)
         {

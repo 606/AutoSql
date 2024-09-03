@@ -1,4 +1,5 @@
-﻿using AutoSql.Consts;
+﻿using System;
+using AutoSql.Consts;
 using AutoSql.Interfaces;
 using AutoSql.Services;
 
@@ -10,7 +11,7 @@ namespace AutoSql.Validators
 
         public RepositoryValidator(GitService gitService)
         {
-            _gitService = gitService;
+            _gitService = gitService ?? throw new ArgumentNullException(nameof(gitService));
         }
 
         public bool Validate(string input, string repoPath, out string errorMessage)

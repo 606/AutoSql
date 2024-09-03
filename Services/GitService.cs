@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace AutoSql.Services
 {
@@ -85,6 +86,18 @@ namespace AutoSql.Services
 
             // Якщо не знайшли відповідний тип, повертаємо стандартний тип
             return CommitTypes.Commit;
+        }
+
+        public List<string> GetDatabaseObjectChanges(string repoPath)
+        {
+            // Отримання списку змінених файлів
+            string[] changedFiles = GetChangedFiles(repoPath);
+
+            // Фільтрація файлів, які стосуються бази даних (наприклад, файли з розширенням .sql)
+            var dbChanges = changedFiles.Where(file => file.EndsWith(".sql")).ToList();
+
+            // Повернення списку змін
+            return dbChanges;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoSql.Consts;
 using AutoSql.Interfaces;
 using AutoSql.Services;
-using System.Windows.Forms;
 
 namespace AutoSql.Validators
 {
@@ -9,10 +8,7 @@ namespace AutoSql.Validators
     {
         private readonly GitService _gitService;
 
-        public CommitValidator(GitService gitService)
-        {
-            _gitService = gitService;
-        }
+        public CommitValidator(GitService gitService) => _gitService = gitService;
 
         public bool Validate(string commitHash, string repoPath, out string errorMessage)
         {

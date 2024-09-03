@@ -28,47 +28,68 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BtnGenerate = new System.Windows.Forms.Button();
+            this.btnGenerateScript = new System.Windows.Forms.Button();
             this.txtRepoPath = new System.Windows.Forms.TextBox();
             this.txtOutputPath = new System.Windows.Forms.TextBox();
+            this.lblRepoPath = new System.Windows.Forms.Label();
+            this.lblOutputPath = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // BtnGenerate
+            // btnGenerateScript
             // 
-            this.BtnGenerate.Location = new System.Drawing.Point(265, 239);
-            this.BtnGenerate.Name = "BtnGenerate";
-            this.BtnGenerate.Size = new System.Drawing.Size(75, 23);
-            this.BtnGenerate.TabIndex = 0;
-            this.BtnGenerate.Text = "Generate Script";
-            this.BtnGenerate.UseVisualStyleBackColor = true;
-            this.BtnGenerate.Click += new System.EventHandler(this.BtnGenerate_Click);
+            this.btnGenerateScript.Location = new System.Drawing.Point(265, 239);
+            this.btnGenerateScript.Name = "btnGenerateScript";
+            this.btnGenerateScript.Size = new System.Drawing.Size(100, 23);
+            this.btnGenerateScript.TabIndex = 0;
+            this.btnGenerateScript.Text = "Generate Script";
+            this.btnGenerateScript.UseVisualStyleBackColor = true;
+            this.btnGenerateScript.Click += new System.EventHandler(this.btnGenerateScript_Click);
             // 
             // txtRepoPath
             // 
-            this.txtRepoPath.Location = new System.Drawing.Point(281, 129);
+            this.txtRepoPath.Location = new System.Drawing.Point(265, 129);
             this.txtRepoPath.Name = "txtRepoPath";
-            this.txtRepoPath.Size = new System.Drawing.Size(100, 20);
+            this.txtRepoPath.Size = new System.Drawing.Size(200, 20);
             this.txtRepoPath.TabIndex = 1;
             // 
             // txtOutputPath
             // 
-            this.txtOutputPath.Location = new System.Drawing.Point(282, 181);
+            this.txtOutputPath.Location = new System.Drawing.Point(265, 181);
             this.txtOutputPath.Name = "txtOutputPath";
-            this.txtOutputPath.Size = new System.Drawing.Size(98, 20);
+            this.txtOutputPath.Size = new System.Drawing.Size(200, 20);
             this.txtOutputPath.TabIndex = 2;
+            // 
+            // lblRepoPath
+            // 
+            this.lblRepoPath.AutoSize = true;
+            this.lblRepoPath.Location = new System.Drawing.Point(265, 110);
+            this.lblRepoPath.Name = "lblRepoPath";
+            this.lblRepoPath.Size = new System.Drawing.Size(82, 13);
+            this.lblRepoPath.TabIndex = 3;
+            this.lblRepoPath.Text = "Repository Path";
+            // 
+            // lblOutputPath
+            // 
+            this.lblOutputPath.AutoSize = true;
+            this.lblOutputPath.Location = new System.Drawing.Point(265, 162);
+            this.lblOutputPath.Name = "lblOutputPath";
+            this.lblOutputPath.Size = new System.Drawing.Size(64, 13);
+            this.lblOutputPath.TabIndex = 4;
+            this.lblOutputPath.Text = "Output Path";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lblOutputPath);
+            this.Controls.Add(this.lblRepoPath);
             this.Controls.Add(this.txtOutputPath);
             this.Controls.Add(this.txtRepoPath);
-            this.Controls.Add(this.BtnGenerate);
+            this.Controls.Add(this.btnGenerateScript);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -77,8 +98,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BtnGenerate;
+        private System.Windows.Forms.Button btnGenerateScript;
         private System.Windows.Forms.TextBox txtRepoPath;
         private System.Windows.Forms.TextBox txtOutputPath;
+        private System.Windows.Forms.Label lblRepoPath;
+        private System.Windows.Forms.Label lblOutputPath;
     }
 }

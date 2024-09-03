@@ -13,8 +13,7 @@ namespace AutoSql.Validators
         {
             _gitService = gitService;
         }
-
-        // Реалізація методу Validate згідно з інтерфейсом IValidator
+         
         public bool Validate(string input, string repoPath, out string errorMessage)
         {
             errorMessage = string.Empty;
