@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace AutoSql.Helpers
@@ -12,6 +12,9 @@ namespace AutoSql.Helpers
     {
         private List<string> _ignoredFiles = new List<string>();
 
+        /// <summary>
+        /// Gets the list of ignored files.
+        /// </summary>
         public IReadOnlyList<string> IgnoredFiles => _ignoredFiles.AsReadOnly();
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace AutoSql.Helpers
         /// <summary>
         /// Checks if a directory exists.
         /// </summary>
-        /// <param name="path">The path of the directory to check.</param>
+        /// <param="path">The path of the directory to check.</param>
         /// <returns>True if the directory exists, otherwise false.</returns>
         public bool DirectoryExists(string path)
         {
@@ -97,3 +100,4 @@ namespace AutoSql.Helpers
         }
     }
 }
+

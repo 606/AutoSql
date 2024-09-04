@@ -30,8 +30,8 @@ namespace AutoSql.Services
 
             using (StreamWriter streamWriter = new StreamWriter(scriptFilePath, false, Encoding.UTF8))
             {
-                string header = _fileHelper.GenerateFileHeader();
-                streamWriter.WriteLine(header);
+                string fileHeader = _fileHelper.GenerateFileHeader();
+                streamWriter.WriteLine(fileHeader);
 
                 foreach (var file in changedFiles)
                 {

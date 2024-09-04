@@ -42,7 +42,8 @@ namespace AutoSql.Consts
     {
         public static readonly HashSet<SqlObjectTypes> AllowedTypes = new HashSet<SqlObjectTypes>
         {
-            SqlObjectTypes.SqlStoredProcedure
+            SqlObjectTypes.SqlStoredProcedure,
+            SqlObjectTypes.StoredProcedure
         };
     }
 }

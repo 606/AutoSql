@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using AutoSql.Helpers;
 using AutoSql.Consts;
+using System.Windows.Forms;
 
 namespace AutoSql.Services
 {
@@ -26,24 +27,24 @@ namespace AutoSql.Services
 
         }
 
-        public void ProcessFile(string fileName, string repoPath, StreamWriter streamWriter)
+        public void ProcessFile(string file, string repoPath, StreamWriter streamWriter)
         {
-            if (fileName.EndsWith(".sql"))
+            if (file.EndsWith(".sql"))
             {
-                var filePath = Path.Combine(repoPath, fileName);
+                var filePath = Path.Combine(repoPath, file);
                 var sqlContent = File.ReadAllText(filePath);
 
-                ProcessSqlContent(sqlContent, streamWriter, fileName);
+                ProcessSqlContent(sqlContent, streamWriter, file);
                 EnsureGoAtEnd(sqlContent, streamWriter);
             }
-            else if (fileName.EndsWith(".cs"))
+            else if (file.EndsWith(".cs"))
             {
-                streamWriter.WriteLine($"-- CLR Object changed: {fileName}");
+                streamWriter.WriteLine($"-- CLR Object changed: {file}");
                 streamWriter.WriteLine("-- Example script for CLR object change");
             }
             else
             {
-                streamWriter.WriteLine($"-- Unrecognized fileName type: {fileName}");
+                streamWriter.WriteLine($"-- Unrecognized file type: {file}");
             }
         }
 
@@ -55,11 +56,11 @@ namespace AutoSql.Services
             {
                 var objectTypeString = SqlObjectTypeHelper.GetSqlObjectType(block);
 
-                if (objectTypeString != null && Enum.TryParse(objectTypeString, true, out SqlObjectTypes objectType) && SqlAllowedObjectTypes.AllowedTypes.Contains(objectType))
+                if (Enum.TryParse(objectTypeString, true, out SqlObjectTypes objectType)
+                    && SqlAllowedObjectTypes.AllowedTypes.Contains(objectType))
                 {
                     switch (objectType)
-                    { 
-
+                    {
                         case SqlObjectTypes.StoredProcedure:
                         case SqlObjectTypes.SqlStoredProcedure:
                         case SqlObjectTypes.ReplicationFilterProcedure:
@@ -67,61 +68,70 @@ namespace AutoSql.Services
                         case SqlObjectTypes.ClrStoredProcedure:
                         ProcessStoredProcedure(block, streamWriter);
                         break;
-                        /*   case nameof(SqlObjectTypes.SqlScalarFunction):
-                           case nameof(SqlObjectTypes.SqlTableValuedFunction):
-                           case nameof(SqlObjectTypes.SqlInlineTableValuedFunction):
-                           case nameof(SqlObjectTypes.ClrScalarFunction):
-                           case nameof(SqlObjectTypes.ClrTableValuedFunction):
-                               ProcessFunction(block, streamWriter);
-                               break;
-                           case nameof(SqlObjectTypes.Trigger):
-                           case nameof(SqlObjectTypes.SqlTrigger):
-                           case nameof(SqlObjectTypes.ClrTrigger):
-                               ProcessTrigger(block, streamWriter);
-                               break;
-                           case nameof(SqlObjectTypes.View):
-                               ProcessView(block, streamWriter);
-                               break;
 
-                        break;
-                        case nameof(SqlObjectTypes.UserTable):
-                        case nameof(SqlObjectTypes.InternalTable):
-                        case nameof(SqlObjectTypes.SystemTable):
+                        // Інші випадки для обробки різних типів SQL об'єктів
+                        /*
+                        case SqlObjectTypes.SqlScalarFunction:
+                        case SqlObjectTypes.SqlTableValuedFunction:
+                        case SqlObjectTypes.SqlInlineTableValuedFunction:
+                        case SqlObjectTypes.ClrScalarFunction:
+                        case SqlObjectTypes.ClrTableValuedFunction:
+                            ProcessFunction(block, streamWriter);
+                            break;
+
+                        case SqlObjectTypes.Trigger:
+                        case SqlObjectTypes.SqlTrigger:
+                        case SqlObjectTypes.ClrTrigger:
+                            ProcessTrigger(block, streamWriter);
+                            break;
+
+                        case SqlObjectTypes.View:
+                            ProcessView(block, streamWriter);
+                            break;
+
+                        case SqlObjectTypes.UserTable:
+                        case SqlObjectTypes.InternalTable:
+                        case SqlObjectTypes.SystemTable:
                             ProcessTable(block, repoPath, streamWriter);
                             break;
 
-                        
-                        case nameof(SqlObjectTypes.CheckConstraint):
-                        case nameof(SqlObjectTypes.DefaultConstraint):
-                        case nameof(SqlObjectTypes.EdgeConstraint):
-                        case nameof(SqlObjectTypes.ForeignKeyConstraint):
-                        case nameof(SqlObjectTypes.PrimaryKeyConstraint):
-                        case nameof(SqlObjectTypes.UniqueConstraint):
+                        case SqlObjectTypes.CheckConstraint:
+                        case SqlObjectTypes.DefaultConstraint:
+                        case SqlObjectTypes.EdgeConstraint:
+                        case SqlObjectTypes.ForeignKeyConstraint:
+                        case SqlObjectTypes.PrimaryKeyConstraint:
+                        case SqlObjectTypes.UniqueConstraint:
                             ProcessConstraint(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.AggregateFunction):
+
+                        case SqlObjectTypes.AggregateFunction:
                             ProcessAggregateFunction(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.PlanGuide):
+
+                        case SqlObjectTypes.PlanGuide:
                             ProcessPlanGuide(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.Rule):
+
+                        case SqlObjectTypes.Rule:
                             ProcessRule(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.SequenceObject):
+
+                        case SqlObjectTypes.SequenceObject:
                             ProcessSequence(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.ServiceQueue):
+
+                        case SqlObjectTypes.ServiceQueue:
                             ProcessServiceQueue(block, streamWriter);
                             break;
-                        case nameof(SqlObjectTypes.Synonym):
+
+                        case SqlObjectTypes.Synonym:
                             ProcessSynonym(block, streamWriter);
                             break;
 
-                     case nameof(SqlObjectTypes.TypeTable):
-                         ProcessTypeTable(block, streamWriter);
-                         break;
-                            */
+                        case SqlObjectTypes.TypeTable:
+                            ProcessTypeTable(block, streamWriter);
+                            break;
+                        */
 
                         default:
                         streamWriter.WriteLine(block);
@@ -130,11 +140,13 @@ namespace AutoSql.Services
                 }
                 else
                 {
+                    // Якщо тип об'єкту не розпізнаний або не дозволений, додаємо файл в ігнор
                     _exportFileHelper.AddIgnoreFile(fileName);
                     streamWriter.WriteLine(block);
                 }
             }
         }
+
 
         private void ProcessStoredProcedure(string block, StreamWriter streamWriter)
         {
