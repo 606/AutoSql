@@ -36,7 +36,8 @@ public static class SqlObjectTypeHelper
         { SqlObjectTypes.Synonym, @"(?i)\bCREATE\s+SYNONYM\b" },
         { SqlObjectTypes.SystemTable, @"(?i)\bCREATE\s+SYSTEM\s+TABLE\b" },
         { SqlObjectTypes.TypeTable, @"(?i)\bCREATE\s+TYPE\s+TABLE\b" },
-        { SqlObjectTypes.UniqueConstraint, @"(?i)\bCREATE\s+UNIQUE\s+CONSTRAINT\b" }
+        { SqlObjectTypes.UniqueConstraint, @"(?i)\bCREATE\s+UNIQUE\s+CONSTRAINT\b" },
+        { SqlObjectTypes.UserDefinedFunction, @"(?i)\bCREATE\s+FUNCTION\b" }
     };
 
     public static string GetSqlObjectType(string sqlContent)

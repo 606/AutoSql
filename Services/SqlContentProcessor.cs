@@ -79,14 +79,14 @@ namespace AutoSql.Services
                                ProcessView(block, streamWriter);
                                break;
 
-                        break;*/
+                        break;
                         case nameof(SqlObjectTypes.UserTable):
                         case nameof(SqlObjectTypes.InternalTable):
                         case nameof(SqlObjectTypes.SystemTable):
                             ProcessTable(block, repoPath, streamWriter);
                             break;
 
-                        /*
+                        
                         case nameof(SqlObjectTypes.CheckConstraint):
                         case nameof(SqlObjectTypes.DefaultConstraint):
                         case nameof(SqlObjectTypes.EdgeConstraint):

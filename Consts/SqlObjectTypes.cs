@@ -32,6 +32,7 @@
         Synonym,
         SystemTable,
         TypeTable,
-        UniqueConstraint
+        UniqueConstraint,
+        UserDefinedFunction
     }
 }
