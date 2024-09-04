@@ -14,55 +14,59 @@ namespace AutoSql.Services
         private readonly SqlContentExtractor _sqlContentExtractor;
         private readonly SqlExistenceHelper _sqlExistenceHelper;
         private readonly GitService _gitService;
+        private readonly ExportFileHelper _exportFileHelper;
 
         public SqlContentProcessor(SqlBlockSplitter sqlBlockSplitter, SqlContentExtractor sqlContentExtractor, SqlExistenceHelper existenceCheckAdder)
         {
             _sqlBlockSplitter = sqlBlockSplitter;
             _sqlContentExtractor = new SqlContentExtractor();
             _sqlExistenceHelper = existenceCheckAdder;
+            _gitService = new GitService();
+            _exportFileHelper = new ExportFileHelper();
+
         }
 
-        public void ProcessFile(string file, string repoPath, StreamWriter streamWriter)
+        public void ProcessFile(string fileName, string repoPath, StreamWriter streamWriter)
         {
-            if (file.EndsWith(".sql"))
+            if (fileName.EndsWith(".sql"))
             {
-                var filePath = Path.Combine(repoPath, file);
+                var filePath = Path.Combine(repoPath, fileName);
                 var sqlContent = File.ReadAllText(filePath);
 
-                ProcessSqlContent(sqlContent, streamWriter);
+                ProcessSqlContent(sqlContent, streamWriter, fileName);
                 EnsureGoAtEnd(sqlContent, streamWriter);
             }
-            else if (file.EndsWith(".cs"))
+            else if (fileName.EndsWith(".cs"))
             {
-                streamWriter.WriteLine($"-- CLR Object changed: {file}");
+                streamWriter.WriteLine($"-- CLR Object changed: {fileName}");
                 streamWriter.WriteLine("-- Example script for CLR object change");
             }
             else
             {
-                streamWriter.WriteLine($"-- Unrecognized file type: {file}");
+                streamWriter.WriteLine($"-- Unrecognized fileName type: {fileName}");
             }
         }
 
-        private void ProcessSqlContent(string sqlContent, StreamWriter streamWriter)
+        private void ProcessSqlContent(string sqlContent, StreamWriter streamWriter, string fileName)
         {
             var blocks = _sqlBlockSplitter.SplitSqlContent(sqlContent);
 
             foreach (var block in blocks)
             {
-                var objectType = SqlObjectTypeHelper.GetSqlObjectType(block);
+                var objectTypeString = SqlObjectTypeHelper.GetSqlObjectType(block);
 
-                if (objectType != null)
+                if (objectTypeString != null && Enum.TryParse(objectTypeString, true, out SqlObjectTypes objectType) && SqlAllowedObjectTypes.AllowedTypes.Contains(objectType))
                 {
                     switch (objectType)
-                    {
+                    { 
 
-                        case nameof(SqlObjectTypes.StoredProcedure):
-                        case nameof(SqlObjectTypes.SqlStoredProcedure):
-                        case nameof(SqlObjectTypes.ReplicationFilterProcedure):
-                        case nameof(SqlObjectTypes.ExtendedStoredProcedure):
-                        case nameof(SqlObjectTypes.ClrStoredProcedure):
-                            ProcessStoredProcedure(block, streamWriter);
-                            break;
+                        case SqlObjectTypes.StoredProcedure:
+                        case SqlObjectTypes.SqlStoredProcedure:
+                        case SqlObjectTypes.ReplicationFilterProcedure:
+                        case SqlObjectTypes.ExtendedStoredProcedure:
+                        case SqlObjectTypes.ClrStoredProcedure:
+                        ProcessStoredProcedure(block, streamWriter);
+                        break;
                         /*   case nameof(SqlObjectTypes.SqlScalarFunction):
                            case nameof(SqlObjectTypes.SqlTableValuedFunction):
                            case nameof(SqlObjectTypes.SqlInlineTableValuedFunction):
@@ -120,12 +124,13 @@ namespace AutoSql.Services
                             */
 
                         default:
-                            streamWriter.WriteLine(block);
-                            break;
+                        streamWriter.WriteLine(block);
+                        break;
                     }
                 }
                 else
                 {
+                    _exportFileHelper.AddIgnoreFile(fileName);
                     streamWriter.WriteLine(block);
                 }
             }

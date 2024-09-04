@@ -1,4 +1,6 @@
-﻿namespace AutoSql.Consts
+﻿using System.Collections.Generic;
+
+namespace AutoSql.Consts
 {
     public enum SqlObjectTypes
     {
@@ -34,5 +36,13 @@
         TypeTable,
         UniqueConstraint,
         UserDefinedFunction
+    }
+
+    public static class SqlAllowedObjectTypes
+    {
+        public static readonly HashSet<SqlObjectTypes> AllowedTypes = new HashSet<SqlObjectTypes>
+        {
+            SqlObjectTypes.SqlStoredProcedure
+        };
     }
 }
